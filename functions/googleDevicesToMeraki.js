@@ -13,7 +13,7 @@ function updateMerakiChromebookStaffDevices() {
     // for (let i = 0; i < googleDevices.length; i++) {
     //     let googleDevice = googleDevices[i];
     googleDevices.forEach(googleDevice => {
-        if (googleDevice.orgUnitPath.includes(googleStaffOu)) {
+        if (googleDevice.orgUnitPath.includes(googleStaffOu) && googleDevice.status == "ACTIVE") {
             staffDevices.push({
                 "name": googleDevice.annotatedAssetId,
                 "mac": googleDevice.macAddress
@@ -109,7 +109,7 @@ function updateMerakiChromebookStudentDevices() {
     // for (let i = 0; i < googleDevices.length; i++) {
     //     let googleDevice = googleDevices[i];
     googleDevices.forEach(googleDevice => {
-        if (googleDevice.orgUnitPath == googleStudentOu) {
+        if (googleDevice.orgUnitPath == googleStudentOu && googleDevice.status == "ACTIVE") {
             studentDevices.push({
                 "name": googleDevice.annotatedAssetId,
                 "mac": googleDevice.macAddress

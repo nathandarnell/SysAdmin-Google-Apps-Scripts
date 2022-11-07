@@ -5,7 +5,8 @@
  * and sends an email to the person it is assigned to in Snipe
  */
 function sendEmailIfOver30DaysUptime() {
-    const emailTemplate = 'Hi ${"name"},<BR><BR>Your computer has been on for ${"days"} days and it needs to be rebooted.  Please reboot at the earliest opportunity!<BR><BR>Sincerely,<BR>Nathan Darnell';
+    getHealthchecksStart('929046bb-0b46-4fad-b1cd-5baa8aab7a83');
+    const emailTemplate = 'Hi ${"name"},<BR><BR>My apologies for the intrusion.  I know that you are busy, but your computer ${"devicename"} has been on for ${"days"} days and it needs to be rebooted.<BR><BR>Rebooting can help prevent performance issues, correct software glitches, and help you tame your browser tabs!  Please reboot at the earliest opportunity!<BR><BR>Sincerely,<BR>Nathan Darnell';
     let emailSubject = 'Reboot Your Mac Please!';
     const businessUnitId = getBusinessUnitId("St. Isidore School");
     const machineGroupId = getMachineGroupId(businessUnitId);
@@ -34,25 +35,33 @@ function sendEmailIfOver30DaysUptime() {
 
         let response = getSnipeDeviceBySerial(device.serial);
 
-        Logger.log('Send email to user: %s with email: %s', response.assigned_to.name, response.assigned_to.username);
+        // Check for an assigned user and username
+        if (response.assigned_to) {
+            if (response.assigned_to.username) {
 
-        let data = {
-            "name": response.assigned_to.name,
-            "days": Math.trunc(device.pluginscript_data)
-        }
+                Logger.log('Send email to user: %s with email: %s', response.assigned_to.name, response.assigned_to.username);
 
-        let emailText = fillInTemplateFromObject(emailTemplate, data);
+                let data = {
+                    "name": response.assigned_to.name,
+                    "days": Math.trunc(device.pluginscript_data),
+                    "devicename": response.name
+                }
 
-        try {
-            MailApp.sendEmail(response.assigned_to.username, emailSubject, "", {
-                htmlBody: emailText,
-                name: 'Nathan Darnell'
-            });
+                let emailText = fillInTemplateFromObject(emailTemplate, data);
 
-        } catch (err) {
-            Logger.log("Couldn't send the email");
+                try {
+                    MailApp.sendEmail(response.assigned_to.username, emailSubject, "", {
+                        htmlBody: emailText,
+                        name: 'Nathan Darnell'
+                    });
+
+                } catch (err) {
+                    Logger.log("Couldn't send the email");
+                }
+            }
         }
     });
+    getHealthchecks('929046bb-0b46-4fad-b1cd-5baa8aab7a83');
 }
 
 

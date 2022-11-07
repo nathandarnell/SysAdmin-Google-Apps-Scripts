@@ -4,7 +4,6 @@
  * except for the Apple TVs
  * Students: Update the names in Meraki with: Name, Mac, groupPolicy, policyId
  * Staff: Update the names in Meraki with: Name, Mac, "Allowed" (no policy for this level)
- * TODO: send apple staff devices to meraki
  */
 function updateAppleDevicesInMeraki() {
   const snipeStaffStatusLabel = "Assigned to Person";
@@ -78,6 +77,13 @@ function updateAppleDevicesInMeraki() {
     Logger.log(device);
   });
 
+  let staffResponse = postProvisionMerakiDevices(snipeStaffDevices, "Normal");
+  if (staffResponse.getResponseCode() == 201) {
+    Logger.log('Updated staff devices in Meraki');
+  } else {
+    Logger.log('Could not update staff devices in Meraki!');
+  }
+
   /*  Logger.log('Number of Snipe Devices not found Assigned to People: %s', snipePersonalDevices.length);
    snipePersonalDevices.forEach(device => {
      Logger.log(device.name);
@@ -86,7 +92,9 @@ function updateAppleDevicesInMeraki() {
 
   // Remove Apple TVs and update student devices in Meraki
   snipeNonPersonalDevices.forEach(device => {
-    if (device.model_number != "A2169" || "A1625") {
+    if (device.model_number === "A2169" || device.model_number === "A1625") {
+      // Logger.log('device.model_number: %s device.name: %s', device.model_number, device.name);
+    } else {
       studentDevices.push({
         "name": device.name,
         "mac": device.custom_fields["MAC Address"].value

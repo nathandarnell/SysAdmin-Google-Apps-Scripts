@@ -20,7 +20,7 @@ The functions folder has scripts that use the API calls for one or more services
 
 
 ## Services
-These are the services used in the functions.  Not all of them are fully fleshed out (Flowroute, FreePBX, Umbrella) but I have plans to add more.  You don't need to use all of these since most of the functions only call one or two different services.  I've tried to link to the API documentation for each when possible:
+These are the services used in the functions.  Not all of them are fully fleshed out (Flowroute, FreePBX, Umbrella at this time) but I have plans to add more.  You don't need to use all of these since most of the functions only call one or two different services.  I've tried to link to the API documentation for each when possible:
 * [SnipeIT](https://snipe-it.readme.io/reference/api-overview) - Asset management
 * Mosyle - Apple MDM (Their API documentation is available in the dashboard if you have the API turned on)
 * [Google](https://developers.google.com/admin-sdk/directory/reference/rest) - Chromebook management and user directory
@@ -43,7 +43,7 @@ Edit the setup.js file with your organization's information.  Each service has i
 If you do not want to use Clasp you can copy-paste the files/functions you want by hand.
 
 ## Contributions
-Opening new issues and Pull requests are welcome.  I mostly see three kinds that I would appreciate:
+Opening new issues and Pull requests are welcome.  Areas that need growth:
 
 * New API calls
 * New functions
