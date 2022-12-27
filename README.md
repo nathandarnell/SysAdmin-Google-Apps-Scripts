@@ -29,6 +29,8 @@ These are the services used in the functions.  Not all of them are fully fleshed
 * [Flowroute](https://developer.flowroute.com/api/) - SIP trunking (VOIP)
 * [Sal](https://github.com/salopensource/sal/wiki/API) - macOS, ChromeOS, Windows, and Linux endpoint reporting
 * [FreePBX](https://wiki.freepbx.org/display/FPG/API) - GUI for Asterisk (VOIP)
+* [Openpath](https://openpath.readme.io/) - Access control system that integrates well with others
+* [Healthchecks](https://github.com/healthchecks/healthchecks) - Cron and service monitoring platform
 
 ## Setup
 #### Clasp

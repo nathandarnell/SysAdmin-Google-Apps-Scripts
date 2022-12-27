@@ -114,7 +114,7 @@ function updateMerakiChromebookStudentDevices() {
                 "name": googleDevice.annotatedAssetId,
                 "mac": googleDevice.macAddress
             });
-            Logger.log('Found: %s %s %s in Google', googleDevice.serialNumber, googleDevice.annotatedAssetId, googleDevice.lastSync);
+            Logger.log('Found: %s %s %s %s in Google', googleDevice.serialNumber, googleDevice.annotatedAssetId, googleDevice.lastSync, googleDevice.status);
             matchingDevices += 1;
         }
     });

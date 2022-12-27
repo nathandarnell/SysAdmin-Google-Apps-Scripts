@@ -1,9 +1,50 @@
 /**
+ * Lists all the users in a group sorted by first name.
+ * @param {string} groupKey - The key for the Group to retrieve users from. 
+ * @returns {Object} The users from the Google OU.
+ * @see {@link https://developers.google.com/admin-sdk/directory/reference/rest/v1/members/list}
+ */
+function listAllGoogleUsersInGroup(groupKey) {
+  groupKey = groupKey || "openpath@yourorg.com";
+  const returnGroup = [];
+  var pageToken;
+  var page;
+  do {
+    page = AdminDirectory.Members.list(groupKey, {
+      // domain: googleDomain,
+      // orderBy: 'givenName',
+      // query: 'orgUnitPath=' + searchOu,
+      "maxResults": 100,
+      "pageToken": pageToken
+    });
+    var members = page.members;
+    if (members) {
+      for (var i = 0; i < members.length; i++) {
+        var member = members[i];
+        if (member.type === "USER") { // Only return users and not customers or other groups
+          returnGroup.push(member);
+          // Logger.log(`Email: ${member.email}`);
+        }
+
+      }
+    } else {
+      Logger.log(`No members found.`);
+    }
+    pageToken = page.nextPageToken;
+  } while (pageToken);
+  Logger.log(`Number of members in the ${groupKey} Group is ${returnGroup.length}`);
+  // Logger.log(`${returnGroup}`);
+  return returnGroup;
+
+}
+
+
+/**
  * Updates the user with new attributes.
  * @param {string} email - The email of the user to update.
  * @param {Object} user - The updated attributes of the user.
  * @returns {Object} The new User object.
- * @see https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User
+ * @see {@link https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User}
  */
 function updateGoogleUser(email, user) {
   try {
@@ -21,9 +62,10 @@ function updateGoogleUser(email, user) {
  * Lists all the users in a domain sorted by first name.
  * @param {string} searchOu - The Google OU to retrieve users from.
  * @returns {Object} The users from the Google OU.
- * @see https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User
+ * @see {@link https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User}
  */
 function listAllGoogleUsers(searchOu) {
+  searchOu = searchOu || "/Staff/Teachers";
   const returnUsers = [];
   var pageToken;
   var page;
@@ -32,6 +74,7 @@ function listAllGoogleUsers(searchOu) {
       domain: googleDomain,
       orderBy: 'givenName',
       query: 'orgUnitPath=' + searchOu,
+      projection: 'full',
       maxResults: 100,
       pageToken: pageToken
     });
@@ -129,7 +172,7 @@ function removeGoogleGroupMember(userEmail, groupEmail) {
 /**
  * Adds a new user to the domain, including only the required information. For
  * the full list of user fields, see the API's reference documentation:
- * @see https://developers.google.com/admin-sdk/directory/v1/reference/users/insert
+ * @see {@link https://developers.google.com/admin-sdk/directory/v1/reference/users/insert}
  * @param {string} newEmail - Email for the new user.
  * @param {string} firstName - First name of the new user.
  * @param {string} lastName - Last name of the new user.

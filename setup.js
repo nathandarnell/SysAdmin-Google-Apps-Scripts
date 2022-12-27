@@ -44,3 +44,12 @@ const flowrouteSecretKey = '';
 const salUrl = 'https://sal.yourorg.com/api/v2'
 const salPublicKey = '';
 const SalPrivateKey = '';
+
+const healthchecksUrl = 'https://healthchecks.yourorg.com/ping';
+
+const openpathUrl = 'https://api.openpath.com/orgs';
+const openpathOrgId = '';
+const openpathApiUser = '';
+const openpathApiPassword = '';
+const openpathGoogleGroup = 'openpath@yourorg.com';
+const openpathDefaultStaffGroupId = 123456;

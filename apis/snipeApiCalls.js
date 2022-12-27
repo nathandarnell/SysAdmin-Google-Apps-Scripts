@@ -226,6 +226,7 @@ function getSnipeCategoryId(category) {
  * @returns {Object} All the category's assets.
  */
 function getSnipeCategoryAssets(snipeCategoryId) {
+  snipeCategoryId = snipeCategoryId || 28;
   var url = snipeServerURL + 'api/v1/hardware?category_id=' + snipeCategoryId
   var headers = {
     "Authorization": "Bearer " + snipeApiKey
