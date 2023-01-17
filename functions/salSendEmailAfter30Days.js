@@ -14,6 +14,7 @@ function sendEmailIfOver30DaysUptime() {
     let pluginscriptRows = getPluginScriptRows("UptimeDays");
     let matchingDevices = [];
 
+
     machines.forEach(machine => {
         pluginscriptRows.forEach(row => {
             if (machine.id == row.submission.machine) {
@@ -28,9 +29,13 @@ function sendEmailIfOver30DaysUptime() {
     });
     Logger.log('Total matching machines found was: %s', matchingDevices.length);
 
-    let devicesOverLimit = matchingDevices.filter(device => device.pluginscript_data > 30);
 
-    devicesOverLimit.forEach(device => {
+    let devicesOverLimit = matchingDevices.filter(device => device.pluginscript_data > 30);
+    let devicesOverLimitAndRecent = devicesOverLimit.filter(checkDeviceDaysSinceCheckin);
+
+    Logger.log(`Found a total of ${devicesOverLimitAndRecent.length} devices that are over 30 days and were active today.`);
+
+    devicesOverLimitAndRecent.forEach(device => {
         Logger.log('This device: %s has been on for %s days', device.hostname, Math.trunc(device.pluginscript_data));
 
         let response = getSnipeDeviceBySerial(device.serial);
@@ -62,6 +67,32 @@ function sendEmailIfOver30DaysUptime() {
         }
     });
     getHealthchecks('929046bb-0b46-4fad-b1cd-5baa8aab7a83');
+}
+
+
+/**
+ * Checks if the check-in date is within one day of the current date
+ * @param {Object} device - The device with a date to compare
+ * @return {boolean} - true or false if the two dates are within one day of each other
+ */
+function checkDeviceDaysSinceCheckin(device) {
+    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
+    const now = new Date();
+
+    const deviceDate = new Date(device.last_checkin);
+
+    // Logger.log(`Device Date is ${deviceDate}`);
+    const diff = Math.abs(now.getTime() - deviceDate.getTime());
+    const diffDays = Math.round(diff / oneDay);
+    if (diffDays <= 1) {
+        Logger.log(`${device.hostname} is within 1 day: ${now} - ${deviceDate}`);
+        return true;
+    } else {
+        // Logger.log(`NOT within 1 day: ${now} - ${deviceDate}`);
+        return false;
+    }
+
+
 }
 
 
